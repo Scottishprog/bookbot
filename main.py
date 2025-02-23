@@ -1,39 +1,34 @@
+from stats import (get_num_words, num_letters_to_sorted_letters, get_num_letters )
+import sys
+
+
 def main():
-    book_path = "books/frankenstein.txt"
+    if len(sys.argv) > 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+
+    book_path = sys.argv[1]
+
     text = get_book_text(book_path)
     num_words = get_num_words(text)
     letter_count = get_num_letters(text)
-    sorted_letter_count = format_num_letters(letter_count)
+    sorted_letter_count = num_letters_to_sorted_letters(letter_count)
 
     # print out report...
-    print("--- Begin report of {book_path} ---")
-    print(f"{num_words} words found in the document")
-    print(" ")
+    print("============ BOOKBOT ============")
+    print(f"Analyzing book found at {book_path}")
+    print("----------- Word Count ---------")
+    print(f"Found {num_words} total words")
+    print("--------- Character Count -------")
     for letter in sorted_letter_count:
-        if letter["letter"].isalpha():
-            print(f"The {letter["letter"]} was found {letter["count"]} times")
-    print("--- End report of {book_path} ---")
+        if letter["char"].isalpha():
+            print(f"{letter['char']}: {letter['num']}")
+    print(f"============= END ===============")
 
 
 def get_book_text(path):
     with open(path) as f:
         return f.read()
-
-
-def get_num_words(text):
-    words = text.split()
-    return len(words)
-
-
-def get_num_letters(text):
-    lowered_text = text.lower()
-    letter_count = dict()
-    for letter in lowered_text:
-        if letter not in letter_count:
-            letter_count[letter] = 1
-        else:
-            letter_count[letter] += 1
-    return letter_count
 
 
 def sort_on(sort_key):
